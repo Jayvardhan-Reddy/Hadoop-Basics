@@ -1,0 +1,76 @@
+
+Hadoop disaster recovery plan is one of the most complicated and expensive elements to protect data.
+Some of the best approaches have balanced cost, complexity and recovery time while planning for disaster recovery.
+Having two Hadoop clusters seems to be excellent disaster recovery plan in Hadoop,
+we need to make sure that data insertion happens to both Hadoop clusters simultaneously.
+We have come across implementations where data written on Hadoop is also inserted into other Non-Hadoop locations.
+If the data in the Hadoop cluster is lost or corrupted, you can load the data from backup location into your Hadoop cluster.
+
+Problems scenarios where the backup is important:
+  1. Data Center or Availability Zones is down(Cloud Environment).
+  2. Hardware crashes(Node Crash, Rack Failure, Data Corruption).
+  3. Deletion of Data in the production environment.
+  4. Permanent Physical Server damage, etc.
+
+What we need to protect and take backup of:
+  1. HDFS Actual Data (S3, Different Cluster, Storage devices like SAN).
+  2. HDFS Metadata, Hive Metastore.(Local FileSystem, S3, Different Cluster, SAN)
+  3.Configurations.(Local FileSystem, S3, SAN).
+  4.Application backup( i.e Configuration backup will take the backup of Application Configurations)
+
+Backup Approaches:
+
+Approach 1:
+  Replication of the data in multiple nodes in multiple data centers.
+
+Approach 2:
+  Backup the HDFS data, Configuration, Metadata of master role(Namenode), Hive Metastore data to S3, Create a pipeline and 
+  transfer the data from S3 to HDFS and vice versa using distcp we can achieve it.
+
+Approach 3:
+  Transfer the data from one cluster to another cluster using distcp, make sure we have DR (Disaster Recovery) cluster.
+  This is the better approach because we can use DR cluster for processing as well.
+  BDR is the best approach to copy the HDFS, Hive Metastore and Metadata to another cluster, we can take some directory backup or 
+  Metastore backup, however, it is cost effective because we need to build DR cluster for it.
+
+Approach 4:
+  While ingesting data into active cluster we can parallel write the data in DR cluster.
+
+Approach 5: Snapshot
+
+Recovery of data to HDFS:
+  We will be recovering the Data, Configurations, Metadata and Metastore from S3 for the cloud environment.
+
+Approach 1:
+
+  Copy the data from S3 to HDFS.
+  If we are backing up the ‘/’ HDFS data we will be copying it in ‘/’ location.
+  We also copy files in a particular folder or particular directory, that’s how we can recover the HDFS data.
+  It all depends on the structure of the directory of which we are taking the backup.
+  Example:
+  For restore, we can use below Command (BASH SCRIPT)
+
+  su $user -c “hadoop distcp s3n://”$s3_access_key”:”$s3_secret_key”@”$s3_location”  ” hdfs://$ActiveNameNode/$HdfsPath”
+
+  This is the best to restore which data and the location it need to get copied.
+
+Approach 2: For Metadata(masters role)
+  We should keep a different Metadata directory, it can be the local directory or on S3.
+  To recover metadata for masters, if we don’t have high Availability in our cluster and node crashes or any instance goes down, 
+  We can add a new node in the cluster with Namenode service and copy the metadata directory from S3 to the disk where Namenode 
+  is pointing for metadata (/dfs/nn) and restart the namenode service.
+
+Approach 3:
+  Using Cloudera BDR, if we are taking the backup of HDFS and Metastore depend on the policy we have mentioned(immediate, scheduled).
+  We can use the DR cluster for processing in case datacenter or cluster crashes. and can make a new cluster with the DR cluster.
+  Also if we build the new cluster we can also copy the data vice versa from DR Custer to the newly active cluster.
+
+Approach 4:(Physical Servers)
+  Keeping the nodes in a different datacenter or different racks, if racks or any datacenter goes down we will be having the replica 
+  of the data, after adding the nodes to the cluster we can run balancer command on it. This is suitable for physical servers.
+
+Approach 5: (Application Restore)
+  Not Tested:
+
+  If we have configuration backup on S3 with the help of distcp we can overwrite the configuration on the cluster.
+  And that’s how we can get the application updated for the jobs running on the cluster.
