@@ -1,4 +1,4 @@
-Grep
+#Grep
 
   grep 'UNIX' file1  Search for the given string in a single file
   grep 'UNIX' file*  Multiple files.
@@ -20,7 +20,7 @@ Grep
   egrep 'SQL|PLSQL|UNIX' file Multiple matching 
   fgrep 'Long$' List  Format Matching 
 
-Find
+#Find
 
   find -name 'emp.txt'  Matching File pattern
   find -iname 'emp.txt'  Ignoring the case.
@@ -43,7 +43,7 @@ Find
 
   Locate Filename  It searches that database for the filename instead of searching your filesystem
 
-User Management
+#User Management
 
   useradd jay  Add a New user
   passwd jay  Add a Passwword
@@ -52,31 +52,31 @@ User Management
   groupdel oracle  Delete a group
   userdel -r jay  r - It will delete the home directory as well
 
-Change Group to the file
+#Change Group to the file
   touch file
   ls -l
   groupadd orafs
   chgrp unix file
   ls -l
 
-Change owner to the file
+#Change owner to the file
   useradd jay
   chown jay file
   ls -l
 
 
-Permission Groups
+#Permission Groups
   Owner (u)
   Group (g)
   Others (o)
   All user (a)
 
-Permission Types
+#Permission Types
  read (r) - 4
  write (w) - 2
  execute (x) - 1
 
-Permission symbols
+#Permission symbols
   Additional permissions(+)
   Revoke the permissions(-)
   Specific permissions(=)
