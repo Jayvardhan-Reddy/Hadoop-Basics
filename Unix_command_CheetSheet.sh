@@ -101,3 +101,50 @@ User creation mask and  Sets default permissions for a newly created file and di
   umask value is 022
   New File Permissions 644 (666 - 022). 
   New Directories Permissions 755 (777 - 022)
+
+#Sed Pattern Matching 
+  -i = option edit the file itself inplace
+  -e script, --expression = script
+
+  To delete first line in a file
+    sed '1d' file.txt > tmpfile; mv tmpfile file.txt  (Time 14s)
+    (or)
+    sed -i '1d' d.txt (Time 20s)
+    (or)
+    tail -n +2 d.txt > r2.txt (Time 88s)
+    
+  To delete last line in a file
+    sed -i '$d' <file>
+    (or)
+    cp foo.txt foo.txt.tmp
+    sed '$d' foot.txt.tmp > foo.txt
+    rm -f foo.txt.tmp
+    
+  For Big files, fastest way
+    head -n -1 foo.txt > temp.txt; mv temp.txt foo.txt
+    
+  If you want to delete the Top line use this
+    tail -n+2 foo.txt #which means lines starting at line 2
+    
+  Most Efficient way (To remove last line from a file without reading the whole file or rewriting anything)
+    tail -n 1 "$file" | wc -c | xargs -I {} truncate "$file" -s -{}
+    
+  To print it on standard output
+    tail -n 1 "$file" | tee > (wc -c | xargs -I {} truncate "$file" -s -{})
+  
+  To delete first n lines
+    $sed -e '1,3d' < t.txt
+    
+  To delete First & last line
+    $sed -i '1d;$d' filename
+    
+  To delete every line that begins with KU
+    $sed /^KU > /d
+    
+  To delete lines other than last line or footer line
+    $sed '$!d' file
+    
+  To delete empty lines or blank line    
+    $sed '/^$/d' file
+    
+      
