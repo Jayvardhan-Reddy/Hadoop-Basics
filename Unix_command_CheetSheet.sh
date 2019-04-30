@@ -146,5 +146,43 @@ User creation mask and  Sets default permissions for a newly created file and di
     
   To delete empty lines or blank line    
     $sed '/^$/d' file
+
+  #Based on Pattern Match
+  Delete lines that begin with specified characters
+    $sed '/^u/d' file
     
+  Delete lines which are in uppercase or capital letters
+    $sed '/^[A-Z]*$/d' file
+    
+  Delete lines starting from a Pattern till the last line
+    $sed '/fedora/,$d' file
+    
+  Delete ;ast line only if it contains the pattern
+    $sed '${/ubuntu/d;}' file
+    
+  #Replacing or Substituing    
+  
+  Replacing a string or substring
+    $sed 's/unix/linux/' file.txt
+    
+  Replacing the nth occurance of a pattern in a line
+    $sed 's/unix/linux/2' file.txt
+    
+  Replacing all the occurance of the pattern in a file/line
+    $sed 's/unix/linux/g' file.txt
+    
+  Replacing from nth occurance to all occurances in a line
+    $sed 's/unix/linux/3g' file.txt
+    
+  Replacing string on a range of lines
+    $sed '1,3 s/unix/linux/' file.txt
+    
+  Replace on a lines which matches a pattern
+    $sed '/linux/ s/unix/centos/' file.txt  # Here sed command first looks for the lines which has the pattern "linux" and then replaces the word "unix" with "centos".
+
+  Add a line after a Match [a = after , i = before]
+    $sed '/unix/ a "Add a new line"' file.txt
+    
+  Change a line
+    $sed '/unix/ c "change line" file.txt
       
