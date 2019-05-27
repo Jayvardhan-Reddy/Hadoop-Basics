@@ -186,3 +186,22 @@ User creation mask and  Sets default permissions for a newly created file and di
   Change a line
     $sed '/unix/ c "change line" file.txt
       
+  #Environment variables in Linux or Passing Parameter
+  $#    Stores the number of command-line arguments that 
+        were passed to the shell program.
+  $?    Stores the exit value of the last command that was 
+        executed.
+  $0    Stores the first word of the entered command (the 
+        name of the shell program).
+  $*    Stores all the arguments that were entered on the
+        command line ($1 $2 ...).
+  "$@"  Stores all the arguments that were entered
+        on the command line, individually quoted ("$1" "$2" ...).
+        
+  simple example. If you run following command:
+
+  ./command -yes -no /home/username
+  $# = 3
+  $* = -yes -no /home/username
+  $@ = array: {"-yes", "-no", "/home/username"}
+  $0 = ./command, $1 = -yes etc.
