@@ -17,3 +17,7 @@
 - Hadoop Architecture 1.0
 
 :link: [Hadoop 1.0 Architecture](https://medium.com/@jayvardhan.reddy.v/bigdata-part3-hadoop-1-0-architecture-763f51a0f5f) 
+
+## ETL Workflow
+
+<img src="images/ETL_Workflow.jpeg">
